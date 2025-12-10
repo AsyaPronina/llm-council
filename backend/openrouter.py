@@ -8,7 +8,8 @@ from .config import OPENROUTER_API_KEY, OPENROUTER_API_URL
 async def query_model(
     model: str,
     messages: List[Dict[str, str]],
-    timeout: float = 120.0
+    timeout: float = 120.0,
+    response_format = None
 ) -> Optional[Dict[str, Any]]:
     """
     Query a single model via OpenRouter API.
@@ -29,7 +30,10 @@ async def query_model(
     payload = {
         "model": model,
         "messages": messages,
+        "seed": 42
     }
+    if response_format != None:
+        payload["response_format"] = response_format
 
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
